@@ -14,7 +14,8 @@ client = genai.Client(api_key=GEMINI_API_KEY)
 def generate_reply(prompt: str) -> str:
     # Inject constraints directly into the prompt
     instruct = (
-        "Respond in Luxembourgish. Keep replies concise (but in a full sentence) and relevant to the user's query. "
+        "Respond in Luxembourgish. Keep replies concise (but in a full sentence) and relevant to the user's query." \
+        "Write out numbers with letters"
     )
 
     full_prompt = f"{instruct}\nUser: {prompt}"

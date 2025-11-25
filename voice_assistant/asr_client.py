@@ -1,6 +1,6 @@
 import requests
 
-LUXASR_ENDPOINT = "https://luxasr.uni.lu/v2/asr?diarization=Enabled&outfmt=text"
+LUXASR_ENDPOINT = "https://luxasr.uni.lu/v2/asr?diarization=Disabled&outfmt=text"
 
 def transcribe(audio_bytes: bytes) -> str:
     files = {
