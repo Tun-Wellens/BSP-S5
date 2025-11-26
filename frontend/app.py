@@ -23,7 +23,7 @@ with gr.Blocks() as demo:
 
     trans = gr.Textbox(label="ASR Output")
     reply = gr.Textbox(label="LLM Reply")
-    audio_out = gr.Audio(label="TTS Output", type="filepath")
+    audio_out = gr.Audio(label="TTS Output", type="filepath", autoplay=True)
 
     send_btn = gr.Button("Send to Assistant")
 
