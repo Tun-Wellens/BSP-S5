@@ -50,7 +50,7 @@ GEMINI_API_KEY=your_key_here
 
 ### 6. Run the assistant 
 ```bash
-uv run python -m voice_assistant.main
+uv run python -m frontend.app
 ```
 
 ### License
