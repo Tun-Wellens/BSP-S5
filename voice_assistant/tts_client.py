@@ -2,9 +2,9 @@ from TTS.api import Synthesizer
 import uuid
 import os
 
-MODEL_PATH = "/home/tunwellens/BSP-S5/TTS-for-LOD/inference-male/checkpoint_53442.pth"
-CONFIG_PATH = "/home/tunwellens/BSP-S5/TTS-for-LOD/inference-male/config.json"
-OUTPUT_DIR = "/home/tunwellens/BSP-S5/TTS-for-LOD/output/"
+MODEL_PATH = "../TTS-for-LOD/inference-male/checkpoint_53442.pth"
+CONFIG_PATH = "../TTS-for-LOD/inference-male/config.json"
+OUTPUT_DIR = "../TTS-for-LOD/output/"
 
 synth = Synthesizer(
     tts_checkpoint=MODEL_PATH,

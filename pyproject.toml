@@ -6,7 +6,7 @@ readme = "README.md"
 requires-python = ">=3.11,<3.12"
 dependencies = [
     "fastapi>=0.121.3",
-    "fastrtc>=0.0.34",
+    "fastrtc[vad]>=0.0.34",
     "google-genai>=1.52.0",
     "gradio>=5.50.0",
     "pytest-asyncio>=1.3.0",
