@@ -1,4 +1,5 @@
 import requests
+import json
 
 LUXASR_ENDPOINT = "https://luxasr.uni.lu/v2/asr?diarization=Disabled&outfmt=text"
 
@@ -17,4 +18,4 @@ def transcribe(audio_bytes: bytes) -> str:
         print("LuxASR error:", r.text)
         return ""
 
-    return r.text.strip()
+    return json.loads(r.text.strip())

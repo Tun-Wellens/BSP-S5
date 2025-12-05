@@ -20,11 +20,11 @@ def generate_reply(prompt: str, history: list) -> str:
 
     # Build history context (last 3 exchanges)
     history_text = ""
-    for role, msg in history[-6:]:
-        if role == "user":
-            history_text += f"User: {msg}\n"
+    for msg in history[-6:]:
+        if msg["role"] == "user":
+            history_text += f"User: {msg['content']}\n"
         else:
-            history_text += f"Assistant: {msg}\n"
+            history_text += f"Assistant: {msg['content']}\n"
 
     full_prompt = f"{instruct}\n{history_text}User: {prompt}"
 

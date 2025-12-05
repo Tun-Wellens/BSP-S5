@@ -1,4 +1,4 @@
-from fastrtc import Stream, ReplyOnPause
+from fastrtc import Stream, ReplyOnPause, AdditionalOutputs
 import numpy as np
 import io, wave
 
@@ -61,24 +61,24 @@ def voice_assistant(audio):
     text = transcribe(audio_bytes)
 
     # LLM: directly answer
-    reply = generate_reply(text, conversation_history).lower()
+    reply = generate_reply(text, conversation_history)
 
     # Update history
-    conversation_history.append(("user", text))
-    conversation_history.append(("llm", reply))
+    conversation_history.append({"role": "user", "content": text})
+    conversation_history.append({"role": "assistant", "content": reply})
+
+    # additional outputs
+    yield AdditionalOutputs(conversation_history)
 
     # TTS
-    wav_path = generate_tts(reply)
+    wav_path = generate_tts(reply.lower())
 
     tts = wav_to_np(wav_path)
 
     yield tts
 
-stream = Stream(
-    handler=ReplyOnPause(voice_assistant),
-    modality="audio",
-    mode="send-receive",
-)
+def reset_conversation():
+    global conversation_history
+    conversation_history = []
+    return []
 
-if __name__ == "__main__":
-    stream.ui.launch(server_port=8000)

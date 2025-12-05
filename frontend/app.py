@@ -1,32 +1,40 @@
 import gradio as gr
-import requests
+from fastrtc import WebRTC, ReplyOnPause
+from voice_assistant.main import voice_assistant, reset_conversation
 
-def send_audio(audio_path):
-    if audio_path is None:
-        return "No audio", "", None
-
-    with open(audio_path, "rb") as f:
-        files = {"file": ("audio.wav", f, "audio/wav")}
-        r = requests.post("http://localhost:8000/transcribe", files=files)
-
-    result = r.json()
-    return (
-        result.get("transcription", ""),
-        result.get("reply", ""),
-        result.get("tts_path", None)
-    )
 
 with gr.Blocks() as demo:
-    gr.Markdown("# Local Luxembourgish Voice Assistant")
+    gr.Markdown(
+        "<h2 style='text-align: center;'>Luxembourgish Voice Assistant</h2>"
+    )
 
-    audio_in = gr.Audio(type="filepath", format="wav", label="Record your voice")
+    audio = WebRTC(
+        mode="send-receive",
+        modality="audio",
+        label="Microphone Stream"
+    )
+    history_box = gr.Chatbot(label="Conversation history", type="messages", allow_tags=False)
+    
+    with gr.Row():
+        reset_button = gr.Button("Reset conversation")
+        
+    audio.stream(
+        fn=ReplyOnPause(voice_assistant),
+        inputs=[audio],
+        outputs=[audio],
+        time_limit=90,
+    )
 
-    trans = gr.Textbox(label="ASR Output")
-    reply = gr.Textbox(label="LLM Reply")
-    audio_out = gr.Audio(label="TTS Output", type="filepath", autoplay=True)
+    # Update UI from AdditionalOutputs
+    audio.on_additional_outputs(
+        lambda history: history,
+        outputs=[history_box],
+    )
 
-    send_btn = gr.Button("Send to Assistant")
+    reset_button.click(
+        fn=reset_conversation,
+        inputs=[],
+        outputs=[history_box]
+    )
 
-    send_btn.click(send_audio, inputs=audio_in, outputs=[trans, reply, audio_out])
-
-demo.launch(allowed_paths=["/home/tunwellens/BSP-S5/TTS-for-LOD/output"])
+demo.launch(server_port=8000)
