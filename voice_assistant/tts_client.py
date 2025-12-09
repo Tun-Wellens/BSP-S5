@@ -1,21 +1,35 @@
+from huggingface_hub import snapshot_download
 from TTS.api import Synthesizer
-import uuid
 import os
+import numpy as np
+import wave
+import io
 
-MODEL_PATH = "../TTS-for-LOD/inference-male/checkpoint_53442.pth"
-CONFIG_PATH = "../TTS-for-LOD/inference-male/config.json"
-OUTPUT_DIR = "../TTS-for-LOD/output/"
+MODEL_DIR = snapshot_download("denZLS/luxembourgish-male-vits-tts")
+
+MODEL_PATH = os.path.join(MODEL_DIR, "checkpoint_53442.pth")
+CONFIG_PATH = os.path.join(MODEL_DIR, "config.json")
 
 synth = Synthesizer(
     tts_checkpoint=MODEL_PATH,
     tts_config_path=CONFIG_PATH
 )
 
-def generate_tts(text: str) -> str:
-    out_name = f"{uuid.uuid4()}.wav"
-    out_path = os.path.join(OUTPUT_DIR, out_name)
-
+def generate_tts(text: str):
+    """
+    Synthesizes TTS and returns (sample_rate, audio_array)
+    Input: string
+    Output: (sample_rate, audio_array)
+    """
     wav = synth.tts(text)
-    synth.save_wav(wav, out_path)
 
-    return out_path
+    audio_f32 = np.asarray(wav, dtype=np.float32).flatten()
+
+    # Convert to int16 PCM
+    audio_int16 = (audio_f32 * 32767).astype(np.int16)
+
+    # Reshape to (1, N) because fastrtc expects 2D array
+    audio_int16 = audio_int16.reshape(1, -1)
+
+    # sample rate, audio array
+    return 22050, audio_int16
