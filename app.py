@@ -1,7 +1,15 @@
+"""
+import os
+os.system("pip uninstall -y gradio")
+os.system("pip install gradio==5.50.0")
+"""
 import gradio as gr
-from fastrtc import WebRTC, ReplyOnPause
+from fastrtc import WebRTC, ReplyOnPause, get_cloudflare_turn_credentials_async, get_cloudflare_turn_credentials
 from voice_assistant.main import voice_assistant, reset_conversation
+from gradio.utils import get_space
 
+async def get_client_credentials():
+    return await get_cloudflare_turn_credentials_async()
 
 with gr.Blocks() as demo:
     gr.Markdown(
@@ -11,7 +19,14 @@ with gr.Blocks() as demo:
     audio = WebRTC(
         mode="send-receive",
         modality="audio",
-        label="Microphone Stream"
+        label="Microphone Stream",
+        rtc_configuration=get_client_credentials if get_space() else None,
+        server_rtc_configuration=(
+            get_cloudflare_turn_credentials(ttl=360_000)
+            if get_space()
+            else None
+        ),
+        time_limit=90 if get_space() else None,
     )
     history_box = gr.Chatbot(label="Conversation history", type="messages", allow_tags=False)
     
@@ -22,7 +37,6 @@ with gr.Blocks() as demo:
         fn=ReplyOnPause(voice_assistant),
         inputs=[audio],
         outputs=[audio],
-        time_limit=90,
     )
 
     # Update UI from AdditionalOutputs
@@ -37,4 +51,4 @@ with gr.Blocks() as demo:
         outputs=[history_box]
     )
 
-demo.launch(server_port=8000)
+demo.launch(ssr_mode=False)

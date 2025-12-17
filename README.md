@@ -23,7 +23,16 @@ This project uses open Luxembourgish language resources provided by:
 
 Their speech-to-text and text-to-speech models form the core of this assistant.
 
+## Try it out
+
+You can try the Luxembourgish voice assistant directly in your browser on **Hugging Face Spaces**:
+
+[Launch the demo on Hugging Face Spaces](https://huggingface.co/spaces/Tun-Wellens/luxembourgish-voice-assistant)
+
+No installation required, just open the link and start talking.
+
 ## Installation and Setup
+If you prefer to run the assistant on your own machine, follow the instructions below to install the dependencies and start the app locally.
 
 ### 1. Clone this repository
 ```bash
