@@ -11,7 +11,17 @@ from gradio.utils import get_space
 async def get_client_credentials():
     return await get_cloudflare_turn_credentials_async()
 
-with gr.Blocks() as demo:
+# forces the recording component to be on top of other elements
+css = """
+#audio-component {
+    z-index: 9999 !important;
+    position: relative;
+    min-height: auto !important;
+    height: auto !important;
+}
+"""
+
+with gr.Blocks(css=css) as demo:
     gr.Markdown(
         "<h2 style='text-align: center;'>Luxembourgish Voice Assistant</h2>"
     )
@@ -20,6 +30,7 @@ with gr.Blocks() as demo:
         mode="send-receive",
         modality="audio",
         label="Microphone Stream",
+        elem_id="audio-component", # Added ID to target with CSS
         rtc_configuration=get_client_credentials if get_space() else None,
         server_rtc_configuration=(
             get_cloudflare_turn_credentials(ttl=360_000)
