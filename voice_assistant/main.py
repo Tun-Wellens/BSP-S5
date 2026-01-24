@@ -27,10 +27,10 @@ def np_to_wav(audio):
 
 def voice_assistant(audio):
     # Read audio
-    audio_bytes = np_to_wav(audio)
+    wav_file_bytes = np_to_wav(audio)
 
     # ASR
-    text = transcribe(audio_bytes)
+    text = transcribe(wav_file_bytes)
 
     # LLM: directly answer
     reply = generate_reply(text, conversation_history)
