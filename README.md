@@ -51,7 +51,14 @@ Add your API keys, for example:
 GEMINI_API_KEY=your_key_here
 ```
 
-### 4. Run the assistant 
+### 4. Select Gemini Model for Generation
+in voice_assistant/llm_client.py
+select based on if you have a paid or free key:
+```python
+model="gemini-3-flash-preview", # or gemini-2.5-flash if on free tier
+```
+
+### 5. Run the assistant 
 ```bash
 uv run python app.py
 ```

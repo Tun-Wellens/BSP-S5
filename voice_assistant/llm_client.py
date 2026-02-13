@@ -29,7 +29,7 @@ def generate_reply(prompt: str, history: list) -> str:
     full_prompt = f"{instruct}\n{history_text}User: {prompt}"
 
     response = client.models.generate_content(
-        model="gemini-2.5-flash",
+        model="gemini-3-flash-preview", # or gemini-2.5-flash if on free tier
         contents=full_prompt
     )
 
