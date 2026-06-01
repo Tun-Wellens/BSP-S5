@@ -1,4 +1,3 @@
 fastrtc[vad]>=0.0.34
 google-genai>=1.52.0
-gradio==5.50.0
 requests>=2.32.5
